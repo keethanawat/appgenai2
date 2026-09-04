@@ -67,7 +67,8 @@ class _MyHomePageState extends State<HomePage> {
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile =
-        await ImagePicker().pickImage(source: source, imageQuality: 50);
+        await ImagePicker().pickImage(source: source, imageQuality: 50,maxWidth: 400,          // จำกัดความกว้างไม่เกิน 800 พิกเซล
+      maxHeight: 400);
     if (pickedFile != null) {
       setState(() {
         _selectedImage = pickedFile;

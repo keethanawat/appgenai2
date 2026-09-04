@@ -36,7 +36,7 @@ class ApiService {
     try {
       final response = await _dio.post("/chat/completions", data: data);
       final jsonResponse = response.data;
-
+      print(jsonResponse);
       if (jsonResponse == null) {
         throw const HttpException('Empty response from API');
       }
@@ -70,7 +70,7 @@ class ApiService {
 
   Future<String> sendDiseaseAdvice({
     required String diseaseName,
-    String model = "gpt-5.6-terra-pro",
+    String model = "gemini-3.1-pro-preview",
   }) async {
     final data = {
       'model': model,
@@ -78,7 +78,7 @@ class ApiService {
         {
           'role': 'user',
           'content': "For the plant health condition '$diseaseName', "
-              "provide exactly three concise precautionary or management measures. "
+              "provide exactly three concise precautionary or management measures IN eng LANGUAGE. "
               "Each measure must be one short sentence. "
               "Return only three bullet points and no additional explanation.",
         }
@@ -93,7 +93,7 @@ class ApiService {
   Future<Map<String, dynamic>> sendImageToAPI({
     required XFile image,
     int maxTokens = 150,
-    String model = "gpt-5.6-terra-pro",
+    String model = "gemini-3.1-pro-preview",
   }) async {
     final String base64Image = await encodeImage(image);
 
@@ -109,10 +109,10 @@ class ApiService {
           'content': [
             {
               'type': 'text',
-              'text': 'Analyze this image of a plant or leaf. Identify the most likely abnormal condition. '
+              'text': 'Analyze this image of a plant or leaf. Identify the most likely abnormal condition and provide its name in Thai language. '
                   'Also, provide the bounding box of the damaged area as normalized coordinates (between 0.0 and 1.0). '
-                  'Respond STRICTLY in valid JSON format like this: {"disease": "Disease Name", "box": [ymin, xmin, ymax, xmax]}. '
-                  'If no disease is found, set "disease" to "I don\'t know" and "box" to []. '
+                  'Respond STRICTLY in valid JSON format like this: {"disease": "ชื่อโรคภาษาไทย", "box": [ymin, xmin, ymax, xmax]}. '
+                  'If no disease is found, set "disease" to "ไม่ทราบ" and "box" to []. '
                   'Do not use markdown blocks like ```json.',
             },
             {
